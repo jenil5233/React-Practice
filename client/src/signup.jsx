@@ -1,18 +1,27 @@
-import { Button } from "bootstrap";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios'
+import {toast } from 'react-toastify';
 
 function Signup() {
-    const [name, setName] = useState();
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const navigate = useNavigate()
     const handleSubmit = (e) => {
         e.preventDefault()
         axios.post('http://localhost:3001/register', { name, email, password })
             .then(result => {
                 console.log(result)
+                toast.success(`${result.data.name} Added as User Successfully`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
                 navigate("/");
             })
             .catch(err => console.log(err))
@@ -67,7 +76,7 @@ function Signup() {
                             <button type="submit" className="btn btn-primary w-100 mt-3">Register</button>
                         </form>
                         <p className="text-center mt-3">
-                            Already have an account? <Link to="/login">Login</Link>
+                            Already have an account? <Link to="/">Login</Link>
                         </p>
                     </div>
                 </div>
