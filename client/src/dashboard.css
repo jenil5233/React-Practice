@@ -39,7 +39,15 @@
 .header {
     border-bottom: 2px solid #dee2e6;
     padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin: 0 5vh 20px 5vh;
+    display: flex;
+    justify-content: space-between;
+}
+.user-image{
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+    border: 1px solid gray;
 }
 
 .header h1 {
@@ -116,7 +124,7 @@
   overflow: hidden;
   transition: all 0.3s ease;
 }
-
+ 
 /* Style the close button */
 .chatbot-close {
   position: absolute;

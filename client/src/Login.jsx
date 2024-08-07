@@ -24,7 +24,7 @@ function Login() {
                     });
                 } else if (result.data.status === 'success') {
                     localStorage.setItem("token", result.data.token);
-                    sessionStorage.setItem("user",result.data.user.name);
+                    sessionStorage.setItem('user', JSON.stringify(result.data.user));
                     toast.success("Successfully Logged in", {
                         position: "top-right",
                         autoClose: 5000,

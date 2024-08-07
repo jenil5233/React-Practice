@@ -1,35 +1,46 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios'
-import {toast } from 'react-toastify';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function Signup() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate()
+    const [file, setFile] = useState(null);
+    const navigate = useNavigate();
+
     const handleSubmit = (e) => {
-        e.preventDefault()
-        axios.post('http://localhost:3001/register', { name, email, password })
-            .then(result => {
-                console.log(result)
-                toast.success(`${result.data.name} Added as User Successfully`, {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                navigate("/");
-            })
-            .catch(err => console.log(err))
-    }
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('password', password);
+        if (file) formData.append('file', file);
+
+        axios.post('http://localhost:3001/register', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(result => {
+            toast.success(`${result.data.name} Added as User Successfully`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            navigate("/");
+        })
+        .catch(err => console.log(err));
+    };
 
     return (
         <div className="container d-flex justify-content-center align-items-center vh-100">
-        <div className="">
+            <div className="">
                 <div className="card shadow-sm">
                     <div className="card-body">
                         <h4 className="card-title text-center mb-4">Register</h4>
@@ -73,6 +84,17 @@ function Signup() {
                                     required
                                 />
                             </div>
+                            <div className="form-group">
+                                <label htmlFor="file">Profile Picture</label>
+                                <input
+                                    type="file"
+                                    id="file"
+                                    className="form-control"
+                                    accept=".jpg, .jpeg, .png"
+                                    onChange={(e) => setFile(e.target.files[0])}
+                                    required
+                                />
+                            </div>
                             <button type="submit" className="btn btn-primary w-100 mt-3">Register</button>
                         </form>
                         <p className="text-center mt-3">
@@ -80,9 +102,9 @@ function Signup() {
                         </p>
                     </div>
                 </div>
-            
+            </div>
         </div>
-    </div>
-    )
+    );
 }
+
 export default Signup;

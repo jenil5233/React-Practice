@@ -2,19 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "./axiosInstance"
 import MyChatbot from "./chatbot";
-import './dashboard.css'; // Import the custom CSS file
-
+import './dashboard.css';
 function Dashboard() {
     const [employees, setEmployees] = useState([]);
     const [editEmployee, setEditEmployee] = useState(null);
     const [isChatbotVisible, setIsChatbotVisible] = useState(false);
-    const sessionUser = sessionStorage.getItem("user");
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
+        const sessionUser = JSON.parse(sessionStorage.getItem("user"));
+        setUser(sessionUser);
         axiosInstance.get('/employees')
             .then(response => {
                 setEmployees(response.data);
+                console.log(response);
             })
             .catch(error => {
                 console.error("There was an error fetching the employee data!", error);
@@ -75,7 +77,8 @@ function Dashboard() {
             </aside>
             <main className="main-content">
                 <header className="header">
-                    <h3>Welcome, {sessionUser}!</h3>
+                    <h3>Welcome, {user ? user.name.toUpperCase() : 'User'}!</h3>
+                    {user && user.imageUrl && <img src={`http://localhost:3001${user.imageUrl}`} alt="User" className="user-image" />}
                 </header>
                 <section className="employee-section">
                     <h4>Employee List</h4>
